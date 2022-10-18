@@ -22,6 +22,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "defines.h"
+
+// Include the game library in the code
 #include "game.h"
 /* USER CODE END Includes */
 
@@ -44,9 +46,16 @@
 TIM_HandleTypeDef htim14;
 
 /* USER CODE BEGIN PV */
+// Flag for moving dot "up" and "down" (to the right or to the left)
 uint8_t down = 0;
+
+// Variable keeps track of the score
 uint8_t score = 0;
+
+// Delay between dot movement (in milliseconds)
 uint16_t delayTime = 250;
+
+// Variable that keeps track of the dot position
 int i = 0;
 /* USER CODE END PV */
 
@@ -86,6 +95,8 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
+
+  // REMOVE THIS DELAY IN THE FINAL CODE (for debug purpose only)
   HAL_Delay(8000);
   /* USER CODE END SysInit */
 
@@ -94,10 +105,10 @@ int main(void)
   MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
 
-  // Start the Timer Interrupt
+  // Start the Timer Interrupt (needed for LED charlieplexing)
   HAL_TIM_Base_Start_IT(&htim14);
 
-  // Show animation
+  // Show start animation
   gameShowStartAnimation();
   /* USER CODE END 2 */
 
@@ -105,31 +116,47 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	    //uint8_t buttonIsPressed = 0;
 	    uint32_t timeout;
+
+	    // Light up only one LED (one dot)
 	    gameSetLeds(1 << i);
+
+	    // Update charlieplex LED buffer
 	    gameUpdateLedBuffer();
+
+	    // If dot got to the end, reverse direction
 	    if (i >= 6)
 	    {
 	        down = 1;
 	    }
 
+	    // If the dot got to the start, again reverse direction again
 	    if (i == 0)
 	    {
 	        down = 0;
 	    }
 
+	    // Get millisecond timestamp
 	    timeout = HAL_GetTick();
+
+	    // Wait until the button is pressed, or until delay has passed (dot needs to be moved)
 	    while (((uint32_t)(HAL_GetTick() - timeout) <= delayTime) && (HAL_GPIO_ReadPin(NET_D1_PORT, 1 << NET_D1_PIN) == GPIO_PIN_SET));
 
+	    // If timeout didn't occur (delay time is still not passed), that means button is pressed
 	    if ((uint32_t)(HAL_GetTick() - timeout) <= delayTime)
 	    {
+	    	// Wait until the button is released
 	        while (HAL_GPIO_ReadPin(NET_D1_PORT, 1 << NET_D1_PIN) == GPIO_PIN_RESET)
 	           ;
+
+	        // If player stopped on the 4th LED (i = 3), it stopped on blue LED, count that as succcess
 	        if (i == 3)
 	        {
+	        	// Show animation for success, add the points.
 	            gameShowSuccAnimation();
 	            score++;
+
+	            // Calculate new delay time (as player scores more points, delays are smaller and smaller)
 	            if (delayTime > 100)
 	            {
 	                delayTime -= REACTION_TIME_STEP1;
@@ -143,7 +170,7 @@ int main(void)
 	                delayTime -= REACTION_TIME_STEP3;
 	            }
 	        }
-	        else
+	        else	// If player missed LED in the middle, that means the game is over. Show fail animation, show the score and start over again.
 	        {
 	            i = 0;
 	            HAL_Delay(500);
@@ -155,7 +182,7 @@ int main(void)
 	            delayTime = 250;
 	            gameShowStartAnimation();
 	        }
-	    }
+	    }	// If timeout has occurred, that means button is not pressed, move the dot.
 	    else
 	    {
 	        down == 0 ? i++ : i--;
@@ -223,7 +250,7 @@ static void MX_TIM14_Init(void)
   htim14.Instance = TIM14;
   htim14.Init.Prescaler = 15;
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim14.Init.Period = 94;
+  htim14.Init.Period = 47;
   htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim14) != HAL_OK)

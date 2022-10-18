@@ -13,11 +13,12 @@
 #define NET_D4_PORT GPIOA
 #define NET_D4_PIN 0
 
-
+// Defined steps for lowering the delay between light movement (in milliseconds)
 #define REACTION_TIME_STEP1 10
 #define REACTION_TIME_STEP2 5
 #define REACTION_TIME_STEP3 1
 
+// Delay for showing the score (blink delay)
 #define SCORE_BLINK_ON  200
 #define SCORE_BLINK_OFF 200
 
