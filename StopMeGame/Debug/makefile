@@ -60,8 +60,8 @@ all: main-build
 main-build: StopMeGame.elf secondary-outputs
 
 # Tool invocations
-StopMeGame.elf StopMeGame.map: $(OBJS) $(USER_OBJS) C:\Users\TAVU\ -\ Borna\Documents\STM32_Projects\StopMeGame\STM32C011J6MX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "StopMeGame.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\TAVU - Borna\Documents\STM32_Projects\StopMeGame\STM32C011J6MX_FLASH.ld" --specs=nosys.specs -Wl,-Map="StopMeGame.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+StopMeGame.elf StopMeGame.map: $(OBJS) $(USER_OBJS) C:\Users\TAVU\ -\ Borna\Documents\GitHub\Soldered-Stop-Me-Game-Soldering-Kit\StopMeGame\STM32C011J6MX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "StopMeGame.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\TAVU - Borna\Documents\GitHub\Soldered-Stop-Me-Game-Soldering-Kit\StopMeGame\STM32C011J6MX_FLASH.ld" --specs=nosys.specs -Wl,-Map="StopMeGame.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

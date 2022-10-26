@@ -96,8 +96,6 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
 
-  // REMOVE THIS DELAY IN THE FINAL CODE (for debug purpose only)
-  HAL_Delay(8000);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
