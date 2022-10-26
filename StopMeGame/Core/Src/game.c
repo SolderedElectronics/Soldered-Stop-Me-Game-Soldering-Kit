@@ -64,16 +64,16 @@ void gameShowStartAnimation()
         {
             ledBuffer |= (1 << i);
             gameUpdateLedBuffer();
-            HAL_Delay(100);
+            HAL_Delay(70);
         }
         for (i = 0; i < 7; i++)
         {
             ledBuffer &= ~(1 << i);
             gameUpdateLedBuffer();
-            HAL_Delay(100);
+            HAL_Delay(70);
         }
     }
-    HAL_Delay(1000);
+    HAL_Delay(700);
 }
 
 // Function shows success animation (blinks with a LED in the middle)
@@ -82,15 +82,15 @@ void gameShowSuccAnimation(void)
     int i;
     ledBuffer = 0;
     gameUpdateLedBuffer();
-    HAL_Delay(250);
+    HAL_Delay(175);
     for (i = 0; i < 1; i++)
     {
         ledBuffer = 1 << 3;
         gameUpdateLedBuffer();
-        HAL_Delay(250);
+        HAL_Delay(175);
         ledBuffer = 0;
         gameUpdateLedBuffer();
-        HAL_Delay(250);
+        HAL_Delay(175);
     }
 }
 
@@ -102,10 +102,10 @@ void gameShowFailAnimation(void)
     {
         ledBuffer = 0b01111111;
         gameUpdateLedBuffer();
-        HAL_Delay(250);
+        HAL_Delay(175);
         ledBuffer = 0;
         gameUpdateLedBuffer();
-        HAL_Delay(250);
+        HAL_Delay(175);
     }
 }
 

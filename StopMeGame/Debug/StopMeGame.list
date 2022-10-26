@@ -349,8 +349,8 @@ void gameShowStartAnimation()
  80002c2:	701a      	strb	r2, [r3, #0]
             gameUpdateLedBuffer();
  80002c4:	f7ff ffbc 	bl	8000240 <gameUpdateLedBuffer>
-            HAL_Delay(100);
- 80002c8:	2064      	movs	r0, #100	; 0x64
+            HAL_Delay(70);
+ 80002c8:	2046      	movs	r0, #70	; 0x46
  80002ca:	f000 fcf9 	bl	8000cc0 <HAL_Delay>
         for (i = 0; i < 7; i++)
  80002ce:	687b      	ldr	r3, [r7, #4]
@@ -383,8 +383,8 @@ void gameShowStartAnimation()
  80002fc:	701a      	strb	r2, [r3, #0]
             gameUpdateLedBuffer();
  80002fe:	f7ff ff9f 	bl	8000240 <gameUpdateLedBuffer>
-            HAL_Delay(100);
- 8000302:	2064      	movs	r0, #100	; 0x64
+            HAL_Delay(70);
+ 8000302:	2046      	movs	r0, #70	; 0x46
  8000304:	f000 fcdc 	bl	8000cc0 <HAL_Delay>
         for (i = 0; i < 7; i++)
  8000308:	687b      	ldr	r3, [r7, #4]
@@ -402,8 +402,8 @@ void gameShowStartAnimation()
  800031e:	ddc1      	ble.n	80002a4 <gameShowStartAnimation+0xc>
         }
     }
-    HAL_Delay(1000);
- 8000320:	23fa      	movs	r3, #250	; 0xfa
+    HAL_Delay(700);
+ 8000320:	23af      	movs	r3, #175	; 0xaf
  8000322:	009b      	lsls	r3, r3, #2
  8000324:	0018      	movs	r0, r3
  8000326:	f000 fccb 	bl	8000cc0 <HAL_Delay>
@@ -430,8 +430,8 @@ void gameShowSuccAnimation(void)
  8000342:	701a      	strb	r2, [r3, #0]
     gameUpdateLedBuffer();
  8000344:	f7ff ff7c 	bl	8000240 <gameUpdateLedBuffer>
-    HAL_Delay(250);
- 8000348:	20fa      	movs	r0, #250	; 0xfa
+    HAL_Delay(175);
+ 8000348:	20af      	movs	r0, #175	; 0xaf
  800034a:	f000 fcb9 	bl	8000cc0 <HAL_Delay>
     for (i = 0; i < 1; i++)
  800034e:	2300      	movs	r3, #0
@@ -444,8 +444,8 @@ void gameShowSuccAnimation(void)
  8000358:	701a      	strb	r2, [r3, #0]
         gameUpdateLedBuffer();
  800035a:	f7ff ff71 	bl	8000240 <gameUpdateLedBuffer>
-        HAL_Delay(250);
- 800035e:	20fa      	movs	r0, #250	; 0xfa
+        HAL_Delay(175);
+ 800035e:	20af      	movs	r0, #175	; 0xaf
  8000360:	f000 fcae 	bl	8000cc0 <HAL_Delay>
         ledBuffer = 0;
  8000364:	4b09      	ldr	r3, [pc, #36]	; (800038c <gameShowSuccAnimation+0x54>)
@@ -453,8 +453,8 @@ void gameShowSuccAnimation(void)
  8000368:	701a      	strb	r2, [r3, #0]
         gameUpdateLedBuffer();
  800036a:	f7ff ff69 	bl	8000240 <gameUpdateLedBuffer>
-        HAL_Delay(250);
- 800036e:	20fa      	movs	r0, #250	; 0xfa
+        HAL_Delay(175);
+ 800036e:	20af      	movs	r0, #175	; 0xaf
  8000370:	f000 fca6 	bl	8000cc0 <HAL_Delay>
     for (i = 0; i < 1; i++)
  8000374:	687b      	ldr	r3, [r7, #4]
@@ -493,8 +493,8 @@ void gameShowFailAnimation(void)
  80003a0:	701a      	strb	r2, [r3, #0]
         gameUpdateLedBuffer();
  80003a2:	f7ff ff4d 	bl	8000240 <gameUpdateLedBuffer>
-        HAL_Delay(250);
- 80003a6:	20fa      	movs	r0, #250	; 0xfa
+        HAL_Delay(175);
+ 80003a6:	20af      	movs	r0, #175	; 0xaf
  80003a8:	f000 fc8a 	bl	8000cc0 <HAL_Delay>
         ledBuffer = 0;
  80003ac:	4b09      	ldr	r3, [pc, #36]	; (80003d4 <gameShowFailAnimation+0x44>)
@@ -502,8 +502,8 @@ void gameShowFailAnimation(void)
  80003b0:	701a      	strb	r2, [r3, #0]
         gameUpdateLedBuffer();
  80003b2:	f7ff ff45 	bl	8000240 <gameUpdateLedBuffer>
-        HAL_Delay(250);
- 80003b6:	20fa      	movs	r0, #250	; 0xfa
+        HAL_Delay(175);
+ 80003b6:	20af      	movs	r0, #175	; 0xaf
  80003b8:	f000 fc82 	bl	8000cc0 <HAL_Delay>
     for (i = 0; i < 2; i++)
  80003bc:	687b      	ldr	r3, [r7, #4]
