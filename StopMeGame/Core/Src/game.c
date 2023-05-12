@@ -1,19 +1,33 @@
+/**
+ **************************************************
+ *
+ * @file        game.c
+ * @brief       Game specific code for Stop Me Game Solder Kit.
+ *
+ *
+ * @note        In order to successfully run this code, make sure to use STM32 cube programmer
+ * 				And set Option Bytes -> User Configuration -> NRST_MODE 2
+ *
+ * @authors     Borna Biro for soldered.com
+ ***************************************************/
+
+// Include header file of this source file.
 #include "game.h"
 
-// Buffer for LEDs that needs to be charlieplexed (each bit represents one LED)
+// Buffer for LEDs that needs to be charlieplexed (each bit represents one LED).
 volatile uint8_t ledBufferCharile = 0;
 
-// Counter for charlieplexing
+// Counter for charlieplexing.
 volatile uint8_t charlieplexCounter = 0;
 
-// Struct needed for defining LEDs with MCU GPIO port and pin
+// Struct needed for defining LEDs with MCU GPIO port and pin.
 struct ledPins
 {
 	GPIO_TypeDef *port;
 	uint32_t pin;
 };
 
-// Struct used to define GPIO pairs needed to go HIGH and LOW to light up one LED in charlieplexing
+// Struct used to define GPIO pairs needed to go HIGH and LOW to light up one LED in charlieplexing.
 struct ledPairs
 {
 	uint8_t gpioHigh;
@@ -30,13 +44,21 @@ struct ledPairs myLedPairs[6] = {{1, 2}, {0, 2}, {1, 0}, {2, 1}, {2, 0}, {0, 1}}
 // Variable for storing current state of LEDs.
 uint8_t ledBuffer;
 
-// Functions sets LED states (each bit represents one LED)
+/**
+ * @brief			Functions sets LED states (each bit represents one LED).
+ *
+ * @returns			None
+ */
 void gameSetLeds(uint8_t _led)
 {
 	ledBuffer = _led;
 }
 
-// Send new "screen" to the LEDs
+/**
+ * @brief			Functions send new "screen" to the LEDs.
+ *
+ * @returns			None
+ */
 void gameUpdateLedBuffer()
 {
 	// Check if the middle LED needs to change the state (this LED is different for the other LEDs, it's not charlieplexed)
@@ -53,7 +75,12 @@ void gameUpdateLedBuffer()
     ledBufferCharile = (ledBuffer & 0b00000111) | ((ledBuffer & 0b01110000) >> 1);
 }
 
-// Function just shows start animation (first all LEDs light up from left to right, then all LEDs turn of in the same way as they light up)
+/**
+ * @brief			Function just shows start animation (first all LEDs light up
+ * 					from left to right, then all LEDs turn of in the same way as they light up).
+ *
+ * @returns			None
+ */
 void gameShowStartAnimation()
 {
     int i;
@@ -76,13 +103,22 @@ void gameShowStartAnimation()
     HAL_Delay(700);
 }
 
-// Function shows success animation (blinks with a LED in the middle)
+/**
+ * @brief			Function shows success animation (blinks with a LED in the middle).
+ *
+ * @returns			None
+ */
 void gameShowSuccAnimation(void)
 {
     int i;
+    // Clear LED buffer (turn all LEDs off)
     ledBuffer = 0;
+    // Send new LEDs status to the buffer.
     gameUpdateLedBuffer();
+    // Wait a little bit.
     HAL_Delay(175);
+
+    // Blink with middle LED.
     for (i = 0; i < 1; i++)
     {
         ledBuffer = 1 << 3;
@@ -94,24 +130,40 @@ void gameShowSuccAnimation(void)
     }
 }
 
-// Function shows fail animation (when player misses LED). It just blinks few times with the missed LED.
+/**
+ * @brief			Function shows fail animation (when player misses LED).
+ * 					It just blinks few times with the missed LED.
+ *
+ * @returns			None
+ */
 void gameShowFailAnimation(void)
 {
     int i;
     for (i = 0; i < 2; i++)
     {
+    	// Light up all LEDs.
         ledBuffer = 0b01111111;
+        // Send new LEDs status to the charlieplex buffer.
         gameUpdateLedBuffer();
+        // Wait a little bit.
         HAL_Delay(175);
+        // Turn off all LEDs.
         ledBuffer = 0;
         gameUpdateLedBuffer();
         HAL_Delay(175);
     }
 }
 
-// Function shows result of the game. L1 shows hundreds of the result, L2 LED show tenths of the result.
-// Each LED blink means the result must me contued up.
-// For example, L1 blinks just once, L2 blinks 3 times, and L3 five times, total score is 135.
+/**
+ * @brief			Function shows result of the game. L1 shows hundreds
+ * 					of the result, L2 LED show tenths of the result.
+ *
+ * @note			With each blink of the LED, result is counted up. For example,
+ * 					L1 blinks just once, L2 blinks 3 times, and L3 five
+ * 					times, total score is 135.
+ *
+ * @returns			None
+ */
 void gameShowResult(uint8_t _r)
 {
     uint8_t _blinks;
@@ -154,7 +206,14 @@ void gameShowResult(uint8_t _r)
     }
 }
 
-// Function is for charlieplexing LEDs (this function is called periodically with the HW timer)
+//
+/**
+ * @brief			Function is for charlieplexing LEDs.
+ *
+ * @note			This function is called periodically with the HW timer.
+ *
+ * @returns			None
+ */
 void gameTimerISR()
 {
     // Because we need to do this as quickly as possible, so we need to use registers

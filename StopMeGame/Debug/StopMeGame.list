@@ -35,15 +35,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  15 .debug_ranges 00000908  00000000  00000000  0002b0d0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  000122ed  00000000  00000000  0002b9d8  2**0
+ 16 .debug_macro  000122f3  00000000  00000000  0002b9d8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0000aaa8  00000000  00000000  0003dcc5  2**0
+ 17 .debug_line   0000ab01  00000000  00000000  0003dccb  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000742d6  00000000  00000000  0004876d  2**0
+ 18 .debug_str    00074320  00000000  00000000  000487cc  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  000bca43  2**0
+ 19 .comment      00000050  00000000  00000000  000bcaec  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  000022d0  00000000  00000000  000bca94  2**2
+ 20 .debug_frame  000022d0  00000000  00000000  000bcb3c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -228,10 +228,10 @@ Disassembly of section .text:
  800021e:	46c0      	nop			; (mov r8, r8)
 
 08000220 <gameSetLeds>:
-// Variable for storing current state of LEDs.
-uint8_t ledBuffer;
-
-// Functions sets LED states (each bit represents one LED)
+ * @brief			Functions sets LED states (each bit represents one LED).
+ *
+ * @returns			None
+ */
 void gameSetLeds(uint8_t _led)
 {
  8000220:	b580      	push	{r7, lr}
@@ -253,8 +253,10 @@ void gameSetLeds(uint8_t _led)
  800023c:	20000052 	.word	0x20000052
 
 08000240 <gameUpdateLedBuffer>:
-
-// Send new "screen" to the LEDs
+ * @brief			Functions send new "screen" to the LEDs.
+ *
+ * @returns			None
+ */
 void gameUpdateLedBuffer()
 {
  8000240:	b580      	push	{r7, lr}
@@ -314,8 +316,10 @@ void gameUpdateLedBuffer()
  8000294:	20000050 	.word	0x20000050
 
 08000298 <gameShowStartAnimation>:
-
-// Function just shows start animation (first all LEDs light up from left to right, then all LEDs turn of in the same way as they light up)
+ * 					from left to right, then all LEDs turn of in the same way as they light up).
+ *
+ * @returns			None
+ */
 void gameShowStartAnimation()
 {
  8000298:	b580      	push	{r7, lr}
@@ -416,23 +420,30 @@ void gameShowStartAnimation()
  8000334:	20000052 	.word	0x20000052
 
 08000338 <gameShowSuccAnimation>:
-
-// Function shows success animation (blinks with a LED in the middle)
+ * @brief			Function shows success animation (blinks with a LED in the middle).
+ *
+ * @returns			None
+ */
 void gameShowSuccAnimation(void)
 {
  8000338:	b580      	push	{r7, lr}
  800033a:	b082      	sub	sp, #8
  800033c:	af00      	add	r7, sp, #0
     int i;
+    // Clear LED buffer (turn all LEDs off)
     ledBuffer = 0;
  800033e:	4b13      	ldr	r3, [pc, #76]	; (800038c <gameShowSuccAnimation+0x54>)
  8000340:	2200      	movs	r2, #0
  8000342:	701a      	strb	r2, [r3, #0]
+    // Send new LEDs status to the buffer.
     gameUpdateLedBuffer();
  8000344:	f7ff ff7c 	bl	8000240 <gameUpdateLedBuffer>
+    // Wait a little bit.
     HAL_Delay(175);
  8000348:	20af      	movs	r0, #175	; 0xaf
  800034a:	f000 fcb9 	bl	8000cc0 <HAL_Delay>
+
+    // Blink with middle LED.
     for (i = 0; i < 1; i++)
  800034e:	2300      	movs	r3, #0
  8000350:	607b      	str	r3, [r7, #4]
@@ -474,8 +485,10 @@ void gameShowSuccAnimation(void)
  800038c:	20000052 	.word	0x20000052
 
 08000390 <gameShowFailAnimation>:
-
-// Function shows fail animation (when player misses LED). It just blinks few times with the missed LED.
+ * 					It just blinks few times with the missed LED.
+ *
+ * @returns			None
+ */
 void gameShowFailAnimation(void)
 {
  8000390:	b580      	push	{r7, lr}
@@ -487,15 +500,19 @@ void gameShowFailAnimation(void)
  8000398:	607b      	str	r3, [r7, #4]
  800039a:	e012      	b.n	80003c2 <gameShowFailAnimation+0x32>
     {
+    	// Light up all LEDs.
         ledBuffer = 0b01111111;
  800039c:	4b0d      	ldr	r3, [pc, #52]	; (80003d4 <gameShowFailAnimation+0x44>)
  800039e:	227f      	movs	r2, #127	; 0x7f
  80003a0:	701a      	strb	r2, [r3, #0]
+        // Send new LEDs status to the charlieplex buffer.
         gameUpdateLedBuffer();
  80003a2:	f7ff ff4d 	bl	8000240 <gameUpdateLedBuffer>
+        // Wait a little bit.
         HAL_Delay(175);
  80003a6:	20af      	movs	r0, #175	; 0xaf
  80003a8:	f000 fc8a 	bl	8000cc0 <HAL_Delay>
+        // Turn off all LEDs.
         ledBuffer = 0;
  80003ac:	4b09      	ldr	r3, [pc, #36]	; (80003d4 <gameShowFailAnimation+0x44>)
  80003ae:	2200      	movs	r2, #0
@@ -523,10 +540,10 @@ void gameShowFailAnimation(void)
  80003d4:	20000052 	.word	0x20000052
 
 080003d8 <gameShowResult>:
-
-// Function shows result of the game. L1 shows hundreds of the result, L2 LED show tenths of the result.
-// Each LED blink means the result must me contued up.
-// For example, L1 blinks just once, L2 blinks 3 times, and L3 five times, total score is 135.
+ * 					times, total score is 135.
+ *
+ * @returns			None
+ */
 void gameShowResult(uint8_t _r)
 {
  80003d8:	b5b0      	push	{r4, r5, r7, lr}
@@ -706,8 +723,10 @@ void gameShowResult(uint8_t _r)
  8000500:	20000052 	.word	0x20000052
 
 08000504 <gameTimerISR>:
-
-// Function is for charlieplexing LEDs (this function is called periodically with the HW timer)
+ * @note			This function is called periodically with the HW timer.
+ *
+ * @returns			None
+ */
 void gameTimerISR()
 {
  8000504:	b580      	push	{r7, lr}
@@ -1072,7 +1091,7 @@ int main(void)
  800073a:	4a3e      	ldr	r2, [pc, #248]	; (8000834 <main+0x194>)
  800073c:	8812      	ldrh	r2, [r2, #0]
  800073e:	4293      	cmp	r3, r2
- 8000740:	d861      	bhi.n	8000806 <main+0x166>
+ 8000740:	d862      	bhi.n	8000808 <main+0x168>
 	    {
 	    	// Wait until the button is released
 	        while (HAL_GPIO_ReadPin(NET_D1_PORT, 1 << NET_D1_PIN) == GPIO_PIN_RESET)
@@ -1116,7 +1135,7 @@ int main(void)
 	                delayTime -= REACTION_TIME_STEP1;
  8000778:	4b2e      	ldr	r3, [pc, #184]	; (8000834 <main+0x194>)
  800077a:	881b      	ldrh	r3, [r3, #0]
- 800077c:	3b0a      	subs	r3, #10
+ 800077c:	3b06      	subs	r3, #6
  800077e:	b29a      	uxth	r2, r3
  8000780:	4b2c      	ldr	r3, [pc, #176]	; (8000834 <main+0x194>)
  8000782:	801a      	strh	r2, [r3, #0]
@@ -1135,11 +1154,11 @@ int main(void)
 	                delayTime -= REACTION_TIME_STEP2;
  8000796:	4b27      	ldr	r3, [pc, #156]	; (8000834 <main+0x194>)
  8000798:	881b      	ldrh	r3, [r3, #0]
- 800079a:	3b05      	subs	r3, #5
+ 800079a:	3b03      	subs	r3, #3
  800079c:	b29a      	uxth	r2, r3
  800079e:	4b25      	ldr	r3, [pc, #148]	; (8000834 <main+0x194>)
  80007a0:	801a      	strh	r2, [r3, #0]
- 80007a2:	e03f      	b.n	8000824 <main+0x184>
+ 80007a2:	e040      	b.n	8000826 <main+0x186>
 	            }
 	            else if ((delayTime <= 30) && (delayTime > 5))
  80007a4:	4b23      	ldr	r3, [pc, #140]	; (8000834 <main+0x194>)
@@ -1193,36 +1212,36 @@ int main(void)
  80007f4:	4b10      	ldr	r3, [pc, #64]	; (8000838 <main+0x198>)
  80007f6:	2200      	movs	r2, #0
  80007f8:	701a      	strb	r2, [r3, #0]
-	            delayTime = 250;
+	            delayTime = DEFAULT_DELAY_TIME;
  80007fa:	4b0e      	ldr	r3, [pc, #56]	; (8000834 <main+0x194>)
- 80007fc:	22fa      	movs	r2, #250	; 0xfa
- 80007fe:	801a      	strh	r2, [r3, #0]
+ 80007fc:	22af      	movs	r2, #175	; 0xaf
+ 80007fe:	0052      	lsls	r2, r2, #1
+ 8000800:	801a      	strh	r2, [r3, #0]
 	            gameShowStartAnimation();
- 8000800:	f7ff fd4a 	bl	8000298 <gameShowStartAnimation>
- 8000804:	e762      	b.n	80006cc <main+0x2c>
+ 8000802:	f7ff fd49 	bl	8000298 <gameShowStartAnimation>
+ 8000806:	e761      	b.n	80006cc <main+0x2c>
 	        }
 	    }	// If timeout has occurred, that means button is not pressed, move the dot.
 	    else
 	    {
 	        down == 0 ? i++ : i--;
- 8000806:	4b0a      	ldr	r3, [pc, #40]	; (8000830 <main+0x190>)
- 8000808:	781b      	ldrb	r3, [r3, #0]
- 800080a:	2b00      	cmp	r3, #0
- 800080c:	d105      	bne.n	800081a <main+0x17a>
- 800080e:	4b07      	ldr	r3, [pc, #28]	; (800082c <main+0x18c>)
- 8000810:	681b      	ldr	r3, [r3, #0]
- 8000812:	1c5a      	adds	r2, r3, #1
- 8000814:	4b05      	ldr	r3, [pc, #20]	; (800082c <main+0x18c>)
- 8000816:	601a      	str	r2, [r3, #0]
- 8000818:	e758      	b.n	80006cc <main+0x2c>
- 800081a:	4b04      	ldr	r3, [pc, #16]	; (800082c <main+0x18c>)
- 800081c:	681b      	ldr	r3, [r3, #0]
- 800081e:	1e5a      	subs	r2, r3, #1
- 8000820:	4b02      	ldr	r3, [pc, #8]	; (800082c <main+0x18c>)
- 8000822:	601a      	str	r2, [r3, #0]
+ 8000808:	4b09      	ldr	r3, [pc, #36]	; (8000830 <main+0x190>)
+ 800080a:	781b      	ldrb	r3, [r3, #0]
+ 800080c:	2b00      	cmp	r3, #0
+ 800080e:	d105      	bne.n	800081c <main+0x17c>
+ 8000810:	4b06      	ldr	r3, [pc, #24]	; (800082c <main+0x18c>)
+ 8000812:	681b      	ldr	r3, [r3, #0]
+ 8000814:	1c5a      	adds	r2, r3, #1
+ 8000816:	4b05      	ldr	r3, [pc, #20]	; (800082c <main+0x18c>)
+ 8000818:	601a      	str	r2, [r3, #0]
+ 800081a:	e757      	b.n	80006cc <main+0x2c>
+ 800081c:	4b03      	ldr	r3, [pc, #12]	; (800082c <main+0x18c>)
+ 800081e:	681b      	ldr	r3, [r3, #0]
+ 8000820:	1e5a      	subs	r2, r3, #1
+ 8000822:	4b02      	ldr	r3, [pc, #8]	; (800082c <main+0x18c>)
+ 8000824:	601a      	str	r2, [r3, #0]
   {
- 8000824:	e752      	b.n	80006cc <main+0x2c>
- 8000826:	46c0      	nop			; (mov r8, r8)
+ 8000826:	e751      	b.n	80006cc <main+0x2c>
  8000828:	20000054 	.word	0x20000054
  800082c:	200000a4 	.word	0x200000a4
  8000830:	200000a0 	.word	0x200000a0
