@@ -1,20 +1,15 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ **************************************************
+ *
+ * @file        main.c
+ * @brief       STM32 code for Stop Me Game Solder Kit.
+ *
+ * @note        In order to successfully run this code, make sure to use STM32 cube programmer
+ * 				And set Option Bytes -> User Configuration -> NRST_MODE 2
+ *
+ * @authors     Borna Biro for soldered.com
+ ***************************************************/
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -52,8 +47,9 @@ uint8_t down = 0;
 // Variable keeps track of the score
 uint8_t score = 0;
 
-// Delay between dot movement (in milliseconds)
-uint16_t delayTime = 250;
+// Delay between dot movement (in milliseconds).
+// The exact value is defined in defines.h.
+uint16_t delayTime = DEFAULT_DELAY_TIME;
 
 // Variable that keeps track of the dot position
 int i = 0;
@@ -177,7 +173,7 @@ int main(void)
 	            gameShowResult(score);
 	            HAL_Delay(500);
 	            score = 0;
-	            delayTime = 250;
+	            delayTime = DEFAULT_DELAY_TIME;
 	            gameShowStartAnimation();
 	        }
 	    }	// If timeout has occurred, that means button is not pressed, move the dot.
