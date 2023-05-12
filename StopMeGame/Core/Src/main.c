@@ -91,7 +91,10 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  
+  // If needed, this delay can be removed.
+  // It is here in case the finished device needs to be reprogrammed.
+  HAL_Delay(100);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
