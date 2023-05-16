@@ -1,7 +1,0 @@
-../Core/Src/game.c:52:6:gameSetLeds	16	static
-../Core/Src/game.c:62:6:gameUpdateLedBuffer	8	static
-../Core/Src/game.c:84:6:gameShowStartAnimation	16	static
-../Core/Src/game.c:111:6:gameShowSuccAnimation	16	static
-../Core/Src/game.c:139:6:gameShowFailAnimation	16	static
-../Core/Src/game.c:167:6:gameShowResult	32	static
-../Core/Src/game.c:217:6:gameTimerISR	8	static

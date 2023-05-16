@@ -1,7 +1,0 @@
-game.c:52:6:gameSetLeds	1
-game.c:62:6:gameUpdateLedBuffer	2
-game.c:84:6:gameShowStartAnimation	4
-game.c:111:6:gameShowSuccAnimation	2
-game.c:139:6:gameShowFailAnimation	2
-game.c:167:6:gameShowResult	4
-game.c:217:6:gameTimerISR	3
